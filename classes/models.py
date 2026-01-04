@@ -4,7 +4,13 @@ from datetime import datetime
 
 # -------------------- TEMPLATE USER --------------------
 
-class TemplateUser(SQLModel):
+class TemplateUser(SQLModel, table=True):
+    """
+    user table
+    """
+
+    __tablename__ = "template_user"
+
     id_template: int = Field(default=None, primary_key=True)
     subscription_id: Optional[int] = Field(default=None)
     name: str
@@ -36,6 +42,9 @@ class TemplateSubscription(SQLModel, table=True):
     """
     subscription table
     """
+
+    __tablename__ = "template_subscription"
+
     id_subscription: int = Field(default=None, primary_key=True)
     name: str
     price: float

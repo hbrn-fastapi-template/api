@@ -20,6 +20,14 @@ def create_subscription(session: Session = Depends(get_session), subscription: T
     # INPUT FORMAT:
     # subscription = TemplateSubscription(
     #     name="Free",
-    #     price=0,
+    #     price=0
+    #     created_at=datetime.now()
     # )
-    return save(session, subscription)
+    try:
+        return save(session, subscription)
+    except HTTPException:
+        raise
+    except ValueError as e:
+        raise HTTPException(status_code=fastapi.status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=fastapi.status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"Erro ao criar documento: {str(e)}")
