@@ -3,7 +3,7 @@ from fastapi.params import Form
 from sqlmodel import Session
 from funcs.db import get_session
 from classes.models import TemplateSubscription, TemplateSubscriptionRead, TemplateSubscriptionCreate
-from utils import get, save
+from utils import get, save, db_commit
 
 router = APIRouter(prefix='/subscription', tags=["Subscription"])
 
@@ -14,6 +14,7 @@ def get_subscriptions(session: Session = Depends(get_session)):
 
 
 @router.post("/", response_model=list[TemplateSubscriptionRead])
+@db_commit
 def create_subscription(session: Session = Depends(get_session), subscription: TemplateSubscriptionCreate):
     # IMPLEMENT CUSTOM LOGIC HERE
 

@@ -11,7 +11,7 @@ class TemplateUser(SQLModel, table=True):
 
     __tablename__ = "template_user"
 
-    id_template: int = Field(default=None, primary_key=True)
+    id_user: int = Field(default=None, primary_key=True)
     subscription_id: Optional[int] = Field(default=None)
     name: str
     created_at: Optional[datetime] = Field(default=None)
@@ -24,16 +24,13 @@ class TemplateUserBase(SQLModel):
     subscription_id: Optional[int] = None
 
 class TemplateUserRead(TemplateUserBase):
-    id_template: int
+    id_user: int
 
 class TemplateUserCreate(TemplateUserBase):
     pass
 
 class TemplateUserUpdate(TemplateUserBase):
     pass
-
-class TemplateUserDelete(TemplateUserBase):
-    id_template: int
 
 # ---------------------------------------------------------------
 # -------------------- TEMPLATE SUBSCRIPTION --------------------
@@ -66,7 +63,19 @@ class TemplateSubscriptionCreate(TemplateSubscriptionBase):
 class TemplateSubscriptionUpdate(TemplateSubscriptionBase):
     pass
 
-class TemplateSubscriptionDelete(TemplateSubscriptionBase):
-    id_subscription: int
-
 # ---------------------------------------------------------------
+
+
+for _cls in [
+    # models
+    TemplateUser, TemplateSubscription,
+    
+    # submodels for CRUD routers
+    TemplateUserCreate, TemplateUserRead, TemplateUserUpdate,
+    TemplateSubscriptionCreate, TemplateSubscriptionRead, TemplateSubscriptionUpdate,
+]:
+    try:
+        _cls.model_rebuild()
+    except Exception:
+        # model_rebuild might not exist in older SQLModel/Pydantic versions; ignore if absent.
+        pass

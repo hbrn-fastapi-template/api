@@ -1,11 +1,15 @@
 from typing import Any
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes.custom_router import custom_router
 from funcs.info import (title, description, version, contact, tags)
-from utils import (DATABASE_URL, create_db_and_tables, 
-                get_engine, make_crud_router, lifespan
-                )
+from routes.custom_subscription_router import custom_subscription_router
+from classes.models import (
+    TemplateUser, TemplateUserCreate, TemplateUserRead, TemplateUserUpdate
+)
+from utils import (
+    DATABASE_URL, create_db_and_tables, 
+    get_engine, make_crud_router, lifespan
+)
 
 # DATABASE_URL is read from the environment (falls back to sqlite:///./database.db)
 engine = get_engine(echo=False)
@@ -39,12 +43,12 @@ def root():
 
 
 # --------------------- BASIC CRUD ---------------------
-template_router = make_crud_router(Any, Any, Any, Any, "/template", tags=["Template"])
+template_user_router = make_crud_router(TemplateUser, TemplateUserBase, TemplateUserRead, TemplateUserCreate, "/user", tags=["User"])
 
 # --------------------- Include Routers ---------------------
 
 # Include routers
-app.include_router(template_router)
+app.include_router(template_user_router)
 
 # Custom router is included separately due to custom logic
-app.include_router(custom_router)
+app.include_router(custom_subscription_router)
