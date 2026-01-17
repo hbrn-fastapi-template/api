@@ -1,0 +1,3 @@
+# db_utils lib
+# fastapi_utils lib
+git+https://github.com/henriquebrnetto/utils.git
